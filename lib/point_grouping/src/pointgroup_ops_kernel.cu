@@ -1,5 +1,5 @@
 #include <ATen/ATen.h>
-#include "datatype/datatype.h"
+#include "datatype.h"
 #include "voxelize/voxelize.cu"
 
 template void voxelize_fp_cuda<float>(float *feats, float *output_feats, Int *rules, Int N, Int C);

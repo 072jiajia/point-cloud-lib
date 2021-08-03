@@ -1,9 +1,3 @@
-/*
-Points to Voxels & Voxels to Points (Modified from SparseConv)
-Written by Li Jiang
-All Rights Reserved 2020.
-*/
-
 #include "voxelize.h"
 
 

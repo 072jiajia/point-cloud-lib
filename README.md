@@ -10,3 +10,18 @@ CUDA_HOME=/usr/local/cuda-10.2
 cd lib/point_grouping
 python setup.py install
 ```
+
+```
+lib
+ +- {op_name}
+ | +- setup.py
+ | +- {op_name}.py
+ | +- src
+ | | +- datatype.h
+ | | +- {op_name}.cpp
+ | | +- {op_name}_kernel.cu
+ | | +- {sub_op}
+ | | | +- {sub_op}.cpp
+ | | | +- {sub_op}.cu
+ | | | +- {sub_op}.h
+```

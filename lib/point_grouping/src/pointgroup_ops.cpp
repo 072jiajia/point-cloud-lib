@@ -1,21 +1,12 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <torch/extension.h>
+#include <torch/serialize/tensor.h>
 
-#include "datatype/datatype.cpp"
+#include "datatype.h"
 #include "voxelize/voxelize.cpp"
 
-
-void voxelize_fp_feat(/* cuda float N*C */ at::Tensor feats, // N * 3 -> M * 3 (N >= M)
-              /* cuda float M*C */ at::Tensor output_feats,
-              /* cuda Int M*(maxActive+1) */ at::Tensor output_map, Int N, Int C){
-    voxelize_fp<float>(feats, output_feats, output_map, N, C);
-}
-
-
-void voxelize_bp_feat(/* cuda float M*C */ at::Tensor d_output_feats,
-            /* cuda float N*C */ at::Tensor d_feats,
-            /* cuda Int M*(maxActive+1) */ at::Tensor output_map,
-            Int N, Int C){
-    voxelize_bp<float>(d_output_feats, d_feats, output_map, N, C);
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m){
+    m.def("voxelize_fp", &voxelize_fp<float>, "voxelize_fp");
+    m.def("voxelize_bp", &voxelize_bp<float>, "voxelize_bp");
 }

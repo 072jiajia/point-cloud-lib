@@ -1,15 +1,9 @@
-/*
-Points to Voxels & Voxels to Points (Modified from SparseConv)
-Written by Li Jiang
-All Rights Reserved 2020.
-*/
-
 #ifndef VOXELIZE_H
 #define VOXELIZE_H
 #include <torch/serialize/tensor.h>
 #include <ATen/cuda/CUDAContext.h>
 
-#include "../datatype/datatype.h"
+#include "../datatype.h"
 
 /* ================================== voxelize ================================== */
 template <typename T>
