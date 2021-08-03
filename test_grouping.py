@@ -24,6 +24,16 @@ def test_simple():
     print(a.grad)
 
 
+def test_simple2(N = 100000):
+    a = torch.rand(N, 100).cuda()
+    b = torch.arange(0, N).cuda()
+
+    c = point_grouping.voxelization(a, b)
+    print((c != a).sum())
+    print(c.shape)
+
+
+
 def test_speed(N, M, times, average):
     a = torch.rand(N, 300).cuda()
     b = torch.randint(0, M, (N, )).cuda()
@@ -37,6 +47,8 @@ def test_speed(N, M, times, average):
     print("avg", (ed - st) / times)
 
 
-test_speed(1000 * 1000, 1000, times=1000, average=False)
+test_simple2()
+
+# test_speed(1000 * 1000, 1000, times=1000, average=False)
 # test_speed(1000 * 1000 * 100, 1000 * 1000, times=10, average=True)
 # test_speed(1000 * 1000 * 100, 1000 * 1000, times=10, average=False)
