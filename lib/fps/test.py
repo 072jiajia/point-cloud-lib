@@ -6,34 +6,23 @@ import matplotlib.pyplot as plt
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
+N = 1024 * 128
+
 times = 2
-a = torch.rand(4096 * 128, 3).cuda()
-
-# b = fps.furthest_point_sampling(a, 10)
-
-# print((a[b] * 100).int())
+a = torch.rand(N, 3).cuda()
+b = torch.rand(N, 3).cuda()
+# b = a
 
 import time
-
 
 st = time.time()
 
 for i in range(times):
-    b = fps.fps_knn(a, 1024 * 2)
-    b = b.cpu()
+    c = fps.knn(a, b)
+    c = c.cpu()
 
-# a = a.cpu().numpy()
-
-# plt.subplot(1, 3, 1)
-# plt.scatter(a[:, 0], a[:, 1], c=b)
-
-# plt.subplot(1, 3, 2)
-# plt.scatter(a[:, 0], a[:, 2], c=b)
-
-# plt.subplot(1, 3, 3)
-# plt.scatter(a[:, 1], a[:, 2], c=b)
-
-# plt.savefig('plot.png')
+for d in c[:100]:
+    print(d)
 
 
 
@@ -41,5 +30,9 @@ ed = time.time()
 
 print((ed - st) / times)
 
-print(b[:10])
+# print(b[:10])
 
+
+for i in range(100):
+    print(i)
+    time.sleep(1)
