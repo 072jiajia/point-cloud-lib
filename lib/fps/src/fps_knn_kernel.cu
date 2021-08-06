@@ -25,10 +25,6 @@ __device__ void __update(float *__restrict__ dists, long *__restrict__ dists_i, 
     dists[idx1] = v2;
     dists_i[idx1] = i2;
   }
-  else {
-    dists[idx1] = v1;
-    dists_i[idx1] = i1;
-  }
 }
 
 
@@ -36,7 +32,8 @@ __device__ void __update(float *__restrict__ dists, long *__restrict__ dists_i, 
 
 __global__ void furthest_point_sampling_kernel(int n, int m, const int block_size,
                                                const float *__restrict__ dataset,
-                                               float *__restrict__ temp,
+                                               float *__restrict__ nearest,
+                                               long *__restrict__ nearest_index,
                                                long *__restrict__ idxs) {
   __shared__ float dists[TOTAL_THREADS];
   __shared__ long dists_i[TOTAL_THREADS];
@@ -61,8 +58,14 @@ __global__ void furthest_point_sampling_kernel(int n, int m, const int block_siz
       float z_diff = dataset[index2 + 2] - z1;
       float d = x_diff * x_diff + y_diff * y_diff + z_diff * z_diff;
 
-      float d2 = min(d, temp[k]);
-      temp[k] = d2;
+      float d2;
+      if (d < nearest[k]) {
+        d2 = nearest[k] = d;
+        nearest_index[k] = j - 1;
+      }
+      else{
+        d2 = nearest[k];
+      }
 
       if (d2 > best) {
         besti = k;
@@ -88,6 +91,23 @@ __global__ void furthest_point_sampling_kernel(int n, int m, const int block_siz
     old = dists_i[0];
     if (tid == 0) idxs[j] = old;
   }
+
+  long index1 = old * 3;
+  float x1 = dataset[index1];
+  float y1 = dataset[index1 + 1];
+  float z1 = dataset[index1 + 2];
+  for (long k = tid; k < n; k += block_size) {
+    long index2 = k * 3;
+
+    float x_diff = dataset[index2] - x1;
+    float y_diff = dataset[index2 + 1] - y1;
+    float z_diff = dataset[index2 + 2] - z1;
+    float d = x_diff * x_diff + y_diff * y_diff + z_diff * z_diff;
+
+    if (d < nearest[k]) {
+      nearest_index[k] = m - 1;
+    }
+  }
 }
 
 
@@ -96,11 +116,11 @@ inline int opt_n_threads(int work_size) {
   return max(min(1 << pow_2, TOTAL_THREADS), 1);
 }
 
-void furthest_point_sampling_kernel_wrapper(int n, int m, const float *dataset, float *temp, long *idxs) {
+void furthest_point_sampling_kernel_wrapper(int n, int m, const float *dataset, float *nearest, long *nearest_index, long *idxs) {
   int n_threads = opt_n_threads(n);
 
   cudaStream_t stream = at::cuda::getCurrentCUDAStream();
 
-  furthest_point_sampling_kernel<<<1, n_threads, 0, stream>>>(n, m, n_threads, dataset, temp, idxs);
+  furthest_point_sampling_kernel<<<1, n_threads, 0, stream>>>(n, m, n_threads, dataset, nearest, nearest_index, idxs);
 
 }

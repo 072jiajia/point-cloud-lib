@@ -1,6 +1,7 @@
 import torch
 import fps
 import os
+import matplotlib.pyplot as plt
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
@@ -16,11 +17,26 @@ import time
 
 
 st = time.time()
+
 for i in range(times):
-    b = fps.furthest_point_sampling(a, 10000)
+    b = fps.fps_knn(a, 1024 * 2)
+    b = b.cpu()
+
+# a = a.cpu().numpy()
+
+# plt.subplot(1, 3, 1)
+# plt.scatter(a[:, 0], a[:, 1], c=b)
+
+# plt.subplot(1, 3, 2)
+# plt.scatter(a[:, 0], a[:, 2], c=b)
+
+# plt.subplot(1, 3, 3)
+# plt.scatter(a[:, 1], a[:, 2], c=b)
+
+# plt.savefig('plot.png')
 
 
-b = b.cpu()
+
 ed = time.time()
 
 print((ed - st) / times)
