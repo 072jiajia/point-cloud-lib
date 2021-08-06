@@ -1,18 +1,6 @@
 #include "utils.h"
 
 
-#define compute_global_min() \
-  min_parallel(1024, 512) \
-  min_parallel(512, 256) \
-  min_parallel(256, 128) \
-  min_parallel(128, 64) \
-  min_parallel(64, 32) \
-  min_parallel(32, 16) \
-  min_parallel(16, 8) \
-  min_parallel(8, 4) \
-  min_parallel(4, 2) \
-  min_parallel(2, 1)
-
 
 __global__ void knn_kernel(int n, int m, int K,
                            const float *__restrict__ points,
@@ -61,7 +49,7 @@ __global__ void knn_kernel(int n, int m, int K,
       dists_i[tid] = besti;
       __syncthreads();
 
-      compute_global_min();
+      compute_global_extremum(compare_parallel, update_min_by_value_and_index);
 
       last_best = dists[0];
       last_besti = dists_i[0];
@@ -108,7 +96,7 @@ __global__ void knn_k1_kernel(int n, int m,
 
     __syncthreads();
 
-    compute_global_min();
+    compute_global_extremum(compare_parallel, update_min_by_value);
 
     if (tid == 0) nearest_index[i] = dists_i[0];
   }

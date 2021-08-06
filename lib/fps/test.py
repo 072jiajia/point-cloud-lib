@@ -2,68 +2,66 @@ import torch
 import fps
 import os
 import matplotlib.pyplot as plt
+import time
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
+def test_knn():
 
-N = 1024 * 128
-M = 1024
+    N = 1024 * 128
+    M = 1024
 
+    times = 5
+    a = torch.rand(N, 3).cuda()
+    b = torch.rand(M, 3).cuda()
 
-# N = 1025
-# N = 5
-
-
-# N = 8
-# M = 1024
-# M = 3
-
-times = 5
-a = torch.rand(N, 3).cuda()
-b = torch.rand(M, 3).cuda()
-# a = torch.tensor([[0,0,0],
-#                   [0,0,1],
-#                   [0,1,0],
-#                   [0,1,1],
-#                   [1,0,0],
-#                   [1,0,1],
-#                   [1,1,0],
-#                   [1,1,1],
-#                   ]).cuda().float()
-
-# b = torch.rand(M, 3).cuda()
-# b = a
-
-import time
-
-st = time.time()
+    st = time.time()
 
 
-c = fps.knn(a, b, 8)
-d = fps.knn(a, b, 1)
+    c = fps.knn(a, b, 8)
+    d = fps.knn(a, b, 1)
 
-print((c[:, 0] != d[:, 0]).sum())
-# print(c.shape)
-# print(d.shape)
-# for i in range(times):
-#     c = fps.knn(a, b, 8)
-#     c = c.cpu()
-
-# print(c)
-
-# for d in c:
-#     if torch.unique(d).shape[0] < 3:
-#         print(d)
+    print((c[:, 0] != d[:, 0]).sum())
 
 
+    ed = time.time()
 
-ed = time.time()
+    print((ed - st) / times)
 
-print((ed - st) / times)
+def test_fps():
+    a = torch.tensor([[0,0,0],
+                      [0,0,1],
+                      [0,1,0],
+                      [0,1,1],
+                      [1,0,0],
+                      [1,0,1],
+                      [1,1,0],
+                      [1,1,1],
+                      ]).cuda().float()
 
-# print(b[:10])
+    print(fps.fps_index(a,8))
 
+def test_fps_group():
+    a = torch.tensor([[0,0,0],
+                      [0,0,1],
+                      [0,1,0],
+                      [0,1,1],
+                      [1,0,0],
+                      [1,0,1],
+                      [1,1,0],
+                      [1,1,1],
+                      ]).cuda().float()
 
-# for i in range(100):
-#     print(i)
-#     time.sleep(1)
+    print(fps.fps_group(a,1))
+    print(fps.fps_group(a,2))
+    print(fps.fps_group(a,3))
+
+    print("================")
+    index = fps.fps_index(a,8)
+    group = fps.fps_group(a,8)
+
+    print(index)
+    print(group)
+    print("=>", group[index])
+
+test_fps_group()

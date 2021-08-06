@@ -6,11 +6,12 @@ setup(
     ext_modules=[
         CUDAExtension('fps', [
             # 'src/fps_kernel.cu',
-            # 'src/fps.cpp',
             # 'src/fps_knn_kernel.cu',
             # 'src/fps_knn.cpp',
-            'src/knn_kernel.cu',
-            'src/knn.cpp',
+            'src/fps_group_kernel.cu',
+            'src/fps_index_kernel.cu',
+            'src/knn_index_kernel.cu',
+            'src/bindings.cpp',
         ], extra_compile_args={'cxx': ['-g'], 'nvcc': ['-O2']})
     ],
     cmdclass={'build_ext': BuildExtension}
