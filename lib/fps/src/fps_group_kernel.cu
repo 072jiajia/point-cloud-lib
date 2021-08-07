@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "__utils__.h"
 
 __global__ void fps_group_kernel(int n, int m,
                                  const float *__restrict__ dataset,

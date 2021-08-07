@@ -173,5 +173,29 @@ def test_max_grouping_v3():
     wait()
 
 
-test_max_grouping_v3()
+
+def test_count():
+    N = 1000000
+    times = 200
+    a = (torch.rand(N) * 1000).cuda().long()
+    st = time.time()
+    for _ in range(times):
+        M = a.max() + 1
+        M = M.cpu()
+        # print(M)
+        # M += 1
+
+        # b = pclib.count_elements(a, M)
+
+        # b = b.cpu()
+        # print('b =')
+        # print(b.max(), b.min())
+
+    M += 1
+    ed = time.time()
+    print((ed -st) / times)
+
+
+
+test_count()
 # test_grouping_v2()

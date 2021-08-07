@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "__utils__.h"
 
 
 __global__ void grouping_fp_kernel(float *feats, float *output_feats, Int *rules, Int N, Int C){

@@ -1,5 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef UTILS_H
+#define UTILS_H
+
+// #include <stdio.h>
+// #include <stdlib.h>
 
 #include <ATen/ATen.h>
 #include <ATen/cuda/CUDAContext.h>
@@ -9,13 +12,12 @@
 #include <cuda_runtime.h>
 #include <torch/extension.h>
 
-#include <google/dense_hash_map>
+// #include <google/dense_hash_map>
 
-/* can remove */
-#include <cstdint>
-#include <array>
+// #include <cstdint>
+// #include <array>
 #include <vector>
-#include <queue>
+// #include <queue>
 
 using Int = long;
 
@@ -85,3 +87,4 @@ inline int opt_n_threads(int work_size) {
 }
 
 
+#endif
