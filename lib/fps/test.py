@@ -70,24 +70,6 @@ def test_fps_group():
     print(group)
     print("=>", group[index])
 
-def test_grouping():
-    import grouping
-    a = torch.rand(5, 3, requires_grad=True).cuda()
-    b = torch.tensor([0, 3, 3, 3, 1]).cuda()
-
-    print("a =")
-    print(a)
-
-    c = grouping.grouping(a, b)
-    print('c =')
-    print(c)
-
-    loss = c.sum()
-    a.retain_grad()
-    loss.backward()
-    print('a.grad =')
-    print(a.grad)
-
 
 def test_max_grouping():
     a = torch.randn(5, 3).cuda()
@@ -196,6 +178,63 @@ def test_count():
     print((ed -st) / times)
 
 
+def test_avg_grouping():
+    import grouping
+    a = torch.rand(5, 3, requires_grad=True).cuda()
+    b = torch.tensor([0, 3, 3, 3, 1]).cuda()
 
-test_count()
-# test_grouping_v2()
+    print("a =")
+    print(a)
+
+    c = grouping.avg_grouping(a, b)
+    print('c =')
+    print(c)
+
+    loss = c.sum()
+    a.retain_grad()
+    loss.backward()
+    print('a.grad =')
+    print(a.grad)
+
+
+def test_max_grouping():
+    import grouping
+    a = torch.rand(5, 3, requires_grad=True).cuda()
+    b = torch.tensor([0, 3, 3, 3, 7]).cuda()
+
+    print("a =")
+    print(a)
+
+    c = grouping.max_grouping(a, b)
+    print('c =')
+    print(c)
+
+    loss = c.sum()
+    a.retain_grad()
+    loss.backward()
+    print('a.grad =')
+    print(a.grad)
+
+
+def test_fps_group_v2():
+    N = 1000000
+    M = 1000
+    times = 10
+    a = torch.randn(N, 3).cuda()
+
+
+    import tqdm
+    st = time.time()
+    for _ in tqdm.tqdm(range(times)):
+        sampled = pclib.fps_group(a,M)
+        sampled = sampled.cpu()
+        # print(sampled.shape)
+
+    ed = time.time()
+    print((ed -st) / times)
+
+
+
+test_fps_group_v2()
+# test_max_grouping()
+test_max_grouping_v3()
