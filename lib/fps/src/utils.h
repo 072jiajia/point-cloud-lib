@@ -9,6 +9,16 @@
 #include <cuda_runtime.h>
 #include <torch/extension.h>
 
+#include <google/dense_hash_map>
+
+/* can remove */
+#include <cstdint>
+#include <array>
+#include <vector>
+#include <queue>
+
+using Int = long;
+
 
 #define update_min_by_value_and_index(dists, dists_i, idx1, idx2) \
   long *index_pointer1 = &dists_i[idx1]; \
