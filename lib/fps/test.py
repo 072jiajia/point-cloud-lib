@@ -132,24 +132,16 @@ def test_grouping_v2():
 
 
 
-def test_max_grouping_v3():
-    N = 100000000
-    times = 2
+def test_max_grouping_v3(N=100000000, times=100):
     a = torch.randn(N, 3).cuda()
-    b = (torch.rand(N).cuda() * 1000).long()
+    b = (torch.rand(N).cuda() * 1).long()
     # wait()
     st = time.time()
     for _ in range(times):
+        c1, c2 = pclib.max_grouping_fp(a, b, b.max()+1)
 
-        # print("a =")
-        # print(a)
-
-        c = pclib.max_grouping_fp(a, b, b.max()+1)
-        # print('c =')
-        # print(c[0])
-        # print(c[1])
-        # c[0] = c[0].cpu()
-        # c[1] = c[1].cpu()
+        c1 = c1.cpu()
+        c2 = c2.cpu()
     ed = time.time()
     print((ed -st) / times)
     wait()
@@ -164,14 +156,6 @@ def test_count():
     for _ in range(times):
         M = a.max() + 1
         M = M.cpu()
-        # print(M)
-        # M += 1
-
-        # b = pclib.count_elements(a, M)
-
-        # b = b.cpu()
-        # print('b =')
-        # print(b.max(), b.min())
 
     M += 1
     ed = time.time()
@@ -216,12 +200,8 @@ def test_max_grouping():
     print(a.grad)
 
 
-def test_fps_group_v2():
-    N = 1000000
-    M = 1000
-    times = 10
+def test_fps_group_v2(N=100000, M=512, times=10):
     a = torch.randn(N, 3).cuda()
-
 
     import tqdm
     st = time.time()
@@ -234,7 +214,40 @@ def test_fps_group_v2():
     print((ed -st) / times)
 
 
+def test_fps_index_v2(N=1000000, M=128, times=100):
+    a = torch.randn(N, 3).cuda()
+
+    import tqdm
+    st = time.time()
+    # for _ in tqdm.tqdm(range(times)):
+    for _ in range(times):
+        # sampled = pclib.fps_index(a,M)
+        sampled = pclib.fps_index_v2(a,M)
+        sampled = sampled.cpu()
+        # print(sampled)
+
+    ed = time.time()
+    print((ed -st) / times)
+
+def test_fps_index_same(N=1000000, M=512, times=10):
+    a = torch.randn(N, 3).cuda()
+
+    import tqdm
+    st = time.time()
+    for _ in tqdm.tqdm(range(times)):
+        sampled_v1 = pclib.fps_index(a,M)
+        sampled_v2 = pclib.fps_index_v2(a,M)
+
+        print((sampled_v1 != sampled_v2).sum())        
+        # print(sampled.shape)
+
+    ed = time.time()
+    print((ed -st) / times)
+
+
+# test_fps_index_v2()
+# test_fps_index_same()
 
 test_fps_group_v2()
 # test_max_grouping()
-test_max_grouping_v3()
+# test_max_grouping_v3(N=10000000)
