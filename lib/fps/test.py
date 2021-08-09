@@ -221,8 +221,8 @@ def test_fps_index_v2(N=1000000, M=128, times=100):
     st = time.time()
     # for _ in tqdm.tqdm(range(times)):
     for _ in range(times):
-        # sampled = pclib.fps_index(a,M)
-        sampled = pclib.fps_index_v2(a,M)
+        sampled = pclib.fps_index(a,M)
+        # sampled = pclib.fps_index_v2(a,M)
         sampled = sampled.cpu()
         # print(sampled)
 
@@ -245,9 +245,10 @@ def test_fps_index_same(N=1000000, M=512, times=10):
     print((ed -st) / times)
 
 
+test_max_grouping()
 # test_fps_index_v2()
 # test_fps_index_same()
 
-test_fps_group_v2()
+# test_fps_group_v2()
 # test_max_grouping()
 # test_max_grouping_v3(N=10000000)
