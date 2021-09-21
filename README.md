@@ -7,21 +7,16 @@ source activate pclib
 conda install -c bioconda google-sparsehash
 conda install pytorch==1.5.1 torchvision==0.6.1 cudatoolkit=10.2 -c pytorch
 CUDA_HOME=/usr/local/cuda-10.2
-cd lib/point_grouping
+cd lib
 python setup.py install
 ```
 
 ```
 lib
- +- {op_name}
- | +- setup.py
- | +- {op_name}.py
- | +- src
- | | +- datatype.h
- | | +- {op_name}.cpp
- | | +- {op_name}_kernel.cu
- | | +- {sub_op}
- | | | +- {sub_op}.cpp
- | | | +- {sub_op}.cu
- | | | +- {sub_op}.h
+ +- setup.py
+ +- src
+ | +- __utils__.h # define macros
+ | +- __kernels__.cu # include kernel files
+ | +- __bindings__.cpp # for creating Python bindings
+ | +- {op_name}_kernel.cu
 ```
