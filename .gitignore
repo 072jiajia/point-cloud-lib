@@ -2,7 +2,7 @@ __pycache__
 */__pycache__
 */*/__pycache__
 
-lib/*/build
-lib/*/dist
-lib/*/*.egg-info
+lib/build
+lib/dist
+lib/*.egg-info
 

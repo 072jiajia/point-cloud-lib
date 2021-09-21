@@ -1,9 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-// #include <stdio.h>
-// #include <stdlib.h>
-
 #include <ATen/ATen.h>
 #include <ATen/cuda/CUDAContext.h>
 #include <cmath>
@@ -12,12 +9,7 @@
 #include <cuda_runtime.h>
 #include <torch/extension.h>
 
-// #include <google/dense_hash_map>
-
-// #include <cstdint>
-// #include <array>
 #include <vector>
-// #include <queue>
 
 using Int = long;
 
