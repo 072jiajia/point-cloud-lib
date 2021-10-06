@@ -1,6 +1,8 @@
-# point-cloud-lib
+# Point-Cloud-Lib
 
+This is a repo aims at modulize / optimize / extent the library for point cloud analysis.
 
+## Installation
 ```
 conda create -n pclib python=3.7
 source activate pclib
@@ -11,6 +13,7 @@ cd lib
 python setup.py install
 ```
 
+## Folder Structure
 ```
 lib
  +- setup.py
